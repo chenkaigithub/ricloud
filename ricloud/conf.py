@@ -27,6 +27,7 @@ def get_config(config_name='ricloud.ini'):
                 'submit_2fa': "%s/c/submit-2fa-challenge/",
                 'download_data': "%s/c/download-data/",
                 'download_file': "%s/c/download-file/",
+                'deactivation': "%s/c/deactivate/",
             }
         for key, uri in endpoints.iteritems():
             if not config.get('endpoints', key):

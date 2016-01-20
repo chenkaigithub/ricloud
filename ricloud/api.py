@@ -42,6 +42,25 @@ class RiCloud(object):
 
         self.backup_client = RiCloud._backup_client_class(self)
 
+    def device_deactivation(self, device_id):
+        """Deactivate a device for a client
+
+        Keyword Arguments:
+        device_id   --Device ID to Deactivate
+        """
+        data = {
+            "device": device_id
+        }
+
+        response = requests.post(
+            settings.get(
+                'endpoints', 'deactivation'),
+            auth=self.auth, data=data, headers=self.headers)
+
+        if response.ok or response.status_code == 400:
+            data = response.json()
+            print data['message']
+
     def login(self, apple_id, password):
         """Log into the iCloud
 
