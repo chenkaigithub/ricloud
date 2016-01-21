@@ -42,24 +42,33 @@ class RiCloud(object):
 
         self.backup_client = RiCloud._backup_client_class(self)
 
-    def device_deactivation(self, device_id):
-        """Deactivate a device for a client
+    def client_management(self, credentials, state):
+        """deactivate/reactivate a device/account
 
         Keyword Arguments:
-        device_id   --Device ID to Deactivate
+        credentials --Device/Accept ID to deactivate pr reactivate
+        state       --Either deactivate or reactivate
         """
-        data = {
-            "device": device_id
-        }
-
+        if "@" in credentials:
+            data = {
+                "account": credentials
+            }
+        else:
+            data = {
+                "device": credentials
+            }
+        data['state'] = state
         response = requests.post(
             settings.get(
-                'endpoints', 'deactivation'),
+                'endpoints', 'client_management'),
             auth=self.auth, data=data, headers=self.headers)
 
-        if response.ok or response.status_code == 400:
+        if response.ok:
             data = response.json()
             print data['message']
+        else:
+            # Unhandled response
+            response.raise_for_status()
 
     def login(self, apple_id, password):
         """Log into the iCloud
@@ -107,6 +116,9 @@ class RiCloud(object):
                     )
         else:
             # Unhandled response
+            f = open('teast.html', 'w')
+            f.write(response.content)
+            f.close()
             response.raise_for_status()
 
     def request_2fa_challenge(self, challenge_device):
