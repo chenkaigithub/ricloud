@@ -253,6 +253,17 @@ file's AppDomain and filename.
 out = open(filename, 'wb')
 api.backup_client.download_file(device_id, file_id, out)
 ```
+## Client account and device management
+
+The library can also be used to manage which devices and accounts can be accessed through the user credentials. a sample script for deactivating iCloud accounts and devices can look like this:
+```python
+from ricloud.api import RiCloud
+
+api = RiCloud()
+# credentials are either ACCOUNT_ID (iCloud email) or the DEVICE_ID for respective device
+# and account management. The state can be set to either 'deactivate' or 'reactivate'
+api.client_management(credentials=ACCOUNT_ID, state='deactivate')
+```
 
 ## Troubleshooting
 
