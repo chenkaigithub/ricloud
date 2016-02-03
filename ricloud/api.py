@@ -42,7 +42,7 @@ class RiCloud(object):
 
         self.backup_client = RiCloud._backup_client_class(self)
 
-    def client_management(self, credentials, state):
+    def client_management(self, credentials, deactivate):
         """deactivate/reactivate a device/account
 
         Keyword Arguments:
@@ -57,16 +57,19 @@ class RiCloud(object):
             data = {
                 "device": credentials
             }
-        data['state'] = state
-        response = requests.post(
-            settings.get(
-                'endpoints', 'client_management'),
-            auth=self.auth, data=data, headers=self.headers)
 
-        if response.ok:
-            data = response.json()
-            print data['message']
+        if deactivate:
+            response = requests.post(
+                settings.get(
+                    'endpoints', 'deactivation'),
+                auth=self.auth, data=data, headers=self.headers)
         else:
+            response = requests.post(
+                settings.get(
+                    'endpoints', 'activation'),
+                auth=self.auth, data=data, headers=self.headers)
+
+        if not response.ok:
             # Unhandled response
             response.raise_for_status()
 
@@ -85,8 +88,9 @@ class RiCloud(object):
         if self.session_key:
             data['key'] = self.session_key
 
-        response = requests.post(settings.get('endpoints', 'login'), auth=self.auth,
-                                    data=data, headers=self.headers)
+        response = requests.post(settings.get(
+                'endpoints', 'login'), auth=self.auth,
+            data=data, headers=self.headers)
 
         if response.ok:
             # We've logged in successfully

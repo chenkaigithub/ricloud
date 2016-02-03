@@ -261,9 +261,10 @@ from ricloud.api import RiCloud
 
 api = RiCloud()
 # credentials are either ACCOUNT_ID (iCloud email) or the DEVICE_ID for respective device
-# and account management. The state can be set to either 'deactivate' or 'reactivate'
-api.client_management(credentials=ACCOUNT_ID, state='deactivate')
+# and account management. The deactivate parameter is set t
+api.client_management(credentials=ACCOUNT_ID, deactivate=True)
 ```
+The credentials are either the `ACCOUNT_ID` (Apple ID) or the `DEVICE_ID` for the respective account and device management. The `deactivate` parameter is set to `True` for deactivation and `False` for reactivation.
 
 ## Troubleshooting
 
