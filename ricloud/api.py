@@ -42,22 +42,33 @@ class RiCloud(object):
 
         self.backup_client = RiCloud._backup_client_class(self)
 
-    def client_management(self, credentials, deactivate):
+    def account_management(self, account_id, deactivate):
+        data = {
+            "account": account_id
+        }
+
+        response = self._client_management(data, deactivate)
+        if not response.ok:
+            # unhandled response
+            response.raise_for_status
+
+    def device_management(self, device_id, deactivate):
+        data = {
+            "device": device_id
+        }
+
+        resposne = self._client_management(data, deactivate)
+        if not resposne.ok:
+            # unhandled response
+            resposne.raise_for_status
+
+    def _client_management(self, data, deactivate):
         """deactivate/reactivate a device/account
 
         Keyword Arguments:
         credentials --Device/Accept ID to deactivate pr reactivate
         state       --Either deactivate or reactivate
         """
-        if "@" in credentials:
-            data = {
-                "account": credentials
-            }
-        else:
-            data = {
-                "device": credentials
-            }
-
         if deactivate:
             response = requests.post(
                 settings.get(
@@ -69,9 +80,7 @@ class RiCloud(object):
                     'endpoints', 'activation'),
                 auth=self.auth, data=data, headers=self.headers)
 
-        if not response.ok:
-            # Unhandled response
-            response.raise_for_status()
+        return response
 
     def login(self, apple_id, password):
         """Log into the iCloud
