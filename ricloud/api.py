@@ -57,10 +57,10 @@ class RiCloud(object):
             "device": device_id
         }
 
-        resposne = self._client_management(data, deactivate)
-        if not resposne.ok:
+        response = self._client_management(data, deactivate)
+        if not response.ok:
             # unhandled response
-            resposne.raise_for_status
+            response.raise_for_status
 
     def _client_management(self, data, deactivate):
         """deactivate/reactivate a device/account
